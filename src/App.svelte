@@ -1,11 +1,19 @@
 <script>
-    import { Router } from "./lib/index";
-    import { goto, routes } from "./router";
+  import WindowBaremetal from "./apps/baremetal/window.svelte";
+  // import WindowClusters from "./apps/clusters/window.svelte";
 </script>
 
-<nav>
-    <button onclick={() => goto("/")}>Home</button>
-    <button onclick={() => goto("/about")}>About</button>
-</nav>
+<main>
+  <WindowBaremetal name="Baremetal" />
+  <!-- 
+    <WindowClusters name="Clusters #1" />
+    <WindowClusters name="Clusters #2" />
+  -->
+</main>
 
-<Router {routes} />
+<style>
+  main {
+    display: flex;
+    gap: 1rem;
+  }
+</style>
