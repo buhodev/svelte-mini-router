@@ -1,18 +1,15 @@
 <script>
   import WindowBaremetal from "./apps/baremetal/window.svelte";
   import WindowClusters from "./apps/clusters/window.svelte";
-  import URLDisplay from "./URLDisplay.svelte";
 </script>
 
 <main>
-  <WindowBaremetal name="baremetal" />
+  <WindowBaremetal name="Baremetal" />
   
-  <WindowClusters name="clusters-1" />
-  <WindowClusters name="clusters-2" />
-  <WindowClusters name="clusters-3" />
+  <WindowClusters name="Clusters #1" />
+  <WindowClusters name="Clusters #2" />
+  <WindowClusters name="Clusters #3" />
 </main>
-
-<URLDisplay />
 
 <style>
   main {

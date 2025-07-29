@@ -1,13 +1,12 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { create_goto, routerContext, navigationContext } from "./context-router.js";
-    import { URLManager } from "./url-manager.js";
 
     /**
      * Component props
-     * @type {{ routes: readonly import('./context-router.js').Route[], fallback?: import('svelte').Component | null, initialPath?: string, onNavigate?: (navigate: (path: string) => void) => void, windowId?: string }}
+     * @type {{ routes: readonly import('./context-router.js').Route[], fallback?: import('svelte').Component | null, initialPath?: string, onNavigate?: (navigate: (path: string) => void) => void }}
      */
-    let { routes = [], fallback = null, initialPath = "/", onNavigate = null, windowId = null } = $props();
+    let { routes = [], fallback = null, initialPath = "/", onNavigate = null } = $props();
 
     /**
      * Current route state
@@ -18,11 +17,6 @@
     
     const handleNavigation = (path: string) => {
         update_route(path);
-        
-        // Update URL if windowId is provided
-        if (windowId) {
-            URLManager.getInstance().updateWindowPath(windowId, path);
-        }
     };
 
     /**
@@ -89,29 +83,12 @@
 
 
     onMount(() => {
-        // Get initial path from URL manager if windowId is provided, otherwise use initialPath
-        const urlManager = URLManager.getInstance();
-        const path = windowId ? urlManager.getWindowPath(windowId) : initialPath;
-        
-        update_route(path);
+        update_route(initialPath);
         
         navigationContext.set(handleNavigation);
         
         if (onNavigate) {
             onNavigate(handleNavigation);
-        }
-        
-        // Subscribe to URL changes if windowId is provided
-        if (windowId) {
-            const unsubscribe = urlManager.subscribe((states) => {
-                const windowState = states.find(state => state.id === windowId.toLowerCase());
-                if (windowState && windowState.path !== route_state.path) {
-                    update_route(windowState.path);
-                }
-            });
-            
-            // Cleanup subscription on component destroy
-            return unsubscribe;
         }
     });
 </script>

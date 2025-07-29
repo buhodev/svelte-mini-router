@@ -9,5 +9,3 @@ export {
   routerContext,
   navigationContext
 } from "./context-router";
-
-export { URLManager, type WindowState } from "./url-manager";

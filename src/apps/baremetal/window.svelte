@@ -42,7 +42,7 @@
     <button onclick={() => navigate?.("/settings")}>Settings</button>
   </nav>
 
-  <ContextRouter routes={[...routes]} initialPath="/" windowId={name} onNavigate={(nav: (path: string) => void) => navigate = nav} />
+  <ContextRouter routes={[...routes]} initialPath="/" onNavigate={(nav: (path: string) => void) => navigate = nav} />
 </main>
 
 <style>
