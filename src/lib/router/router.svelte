@@ -4,13 +4,13 @@
 
     /**
      * Component props
-     * @type {{ routes: readonly import('./router').Route[], fallback?: import('svelte').Component | null }}
+     * @type {{ routes: readonly import('./router.js').Route[], fallback?: import('svelte').Component | null }}
      */
     let { routes = [], fallback = null } = $props();
 
     /**
      * Current route state
-     * @type {import('./router').RouteState}
+     * @type {import('./router.js').RouteState}
      */
     let route_state = $state({ route: null, params: {}, path: "" });
 

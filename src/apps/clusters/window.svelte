@@ -2,9 +2,8 @@
   import Home from "./routes/home.svelte";
   import Dashboard from "./routes/dashboard.svelte";
   import Settings from "./routes/settings.svelte";
-  import { create_goto, create_routes, Router } from "../../lib/index";
+  import { create_goto, create_routes, ContextRouter } from "../../lib/context-router";
 
-  // Define routes
   export const routes = create_routes([
     {
       path: "/",
@@ -20,27 +19,25 @@
     },
   ]);
 
-  // Create type-safe navigation
   export const goto = create_goto(routes);
 </script>
 
-<script>
-  import { route } from "../../lib/index";
-
+<script lang="ts">
   let { name } = $props();
+  
+  let navigate: ((path: string) => void) | null = null;
 </script>
 
 <main>
   <strong>{name}</strong>
-  <code>{$route.path}</code>
-  <p>user can open only any amount of {name} apps at a time</p>
+  <code>Current path will be shown by ContextRouter</code>
   <nav>
-    <button onclick={() => goto("/")}>Home</button>
-    <button onclick={() => goto("/dashboard")}>Dashboard</button>
-    <button onclick={() => goto("/settings")}>Settings</button>
+    <button onclick={() => navigate?.("/")}>Home</button>
+    <button onclick={() => navigate?.("/dashboard")}>Dashboard</button>
+    <button onclick={() => navigate?.("/settings")}>Settings</button>
   </nav>
 
-  <Router {routes} />
+  <ContextRouter routes={[...routes]} initialPath="/" windowId={name} onNavigate={(nav: (path: string) => void) => navigate = nav} />
 </main>
 
 <style>
