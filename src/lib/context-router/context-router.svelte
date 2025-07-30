@@ -1,19 +1,16 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { create_goto, routerContext, navigationContext } from "./context-router.js";
+    import { navigationContext, type Route, type RouteState } from "./context-router";
 
     /**
      * Component props
-     * @type {{ routes: readonly import('./context-router.js').Route[], fallback?: import('svelte').Component | null, initialPath?: string, onNavigate?: (navigate: (path: string) => void) => void }}
      */
     let { routes = [], fallback = null, initialPath = "/", onNavigate = null } = $props();
 
     /**
      * Current route state
      */
-    let route_state = $state<import('./context-router.js').RouteState>({ route: null, params: {}, path: "" });
-
-    const goto = create_goto(routes);
+    let route_state = $state<RouteState>({ route: null, params: {}, path: "" });
     
     const handleNavigation = (path: string) => {
         update_route(path);
@@ -62,7 +59,7 @@
             );
 
             if (match) {
-                const newState: import('./context-router.js').RouteState = {
+                const newState: RouteState = {
                     route: route_item,
                     params: route_params,
                     path: path,
@@ -72,7 +69,7 @@
             }
         }
 
-        const newState: import('./context-router.js').RouteState = {
+        const newState: RouteState = {
             route: null,
             params: {},
             path: path,

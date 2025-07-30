@@ -25,7 +25,10 @@ type HasParams<T extends string> = T extends `${string}:${string}`
   ? true
   : false;
 
-// Create initial router state
+/**
+ * Creates the initial router state
+ * @returns Initial RouteState with null route, empty params, and empty path
+ */
 export function createInitialState(): RouteState {
   return {
     route: null,
@@ -34,21 +37,38 @@ export function createInitialState(): RouteState {
   };
 }
 
-// Create context for router state
+/**
+ * Context for router state management
+ */
 export const routerContext = new Context<RouteState>("router");
 
-// Create context for navigation function
+/**
+ * Context for navigation function management
+ */
 export const navigationContext = new Context<(path: string) => void>("navigation");
 
-// Get router state from context
+/**
+ * Gets the router state from context
+ * @returns Current RouteState from context or initial state if not set
+ */
 export function getRouterState(): RouteState {
   return routerContext.getOr(createInitialState());
 }
 
+/**
+ * Creates a type-safe routes array
+ * @param routes - Array of route definitions
+ * @returns The same routes array with proper TypeScript inference
+ */
 export function create_routes<const T extends readonly Route[]>(routes: T) {
   return routes;
 }
 
+/**
+ * Creates a type-safe navigation function
+ * @param routes - Array of route definitions
+ * @returns Function that navigates to a route and returns the new RouteState
+ */
 export function create_goto<T extends readonly Route[]>(routes: T) {
   return <P extends ExtractPaths<T>>(
     path: P,
@@ -82,6 +102,11 @@ export function create_goto<T extends readonly Route[]>(routes: T) {
   };
 }
 
+/**
+ * Creates a function that generates path strings from route patterns and parameters
+ * @param _routes - Array of route definitions (unused but required for type inference)
+ * @returns Function that interpolates parameters into route patterns
+ */
 export function create_resolver<T extends readonly Route[]>(_routes: T) {
   return <P extends ExtractPaths<T>>(
     path: P,
@@ -96,6 +121,13 @@ export function create_resolver<T extends readonly Route[]>(_routes: T) {
   };
 }
 
+/**
+ * Interpolates parameters into a route pattern
+ * @param path - Route pattern with dynamic segments (e.g., "/users/:id")
+ * @param params - Object containing parameter values
+ * @returns Path with parameters interpolated
+ * @throws Error if a required parameter is missing
+ */
 function interpolate_path(
   path: string,
   params: Record<string, string>,
@@ -130,10 +162,8 @@ function match_route(pattern: string, path: string): { match: boolean; params: R
     const path_part = path_parts[i];
 
     if (pattern_part.startsWith(":")) {
-      // Dynamic parameter
       params[pattern_part.slice(1)] = path_part;
     } else if (pattern_part !== path_part) {
-      // Static part doesn't match
       return { match: false, params: {} };
     }
   }
