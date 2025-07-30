@@ -1,8 +1,9 @@
 import { Context } from "runed";
+import type { Component } from "svelte";
 
 export type Route = {
   path: string;
-  component: import("svelte").Component;
+  component: Component;
   props?: Record<string, unknown>;
 };
 

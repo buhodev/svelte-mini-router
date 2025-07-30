@@ -1,5 +1,5 @@
-<script>
-  let { params = {}, navigate } = $props();
+<script lang="ts">
+  let { params = {}, navigate = null } = $props();
 </script>
 
 <nav>
